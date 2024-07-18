@@ -1,0 +1,21 @@
+{
+  "name": "es6_basic",
+  "version": "1.0.0",
+  "description": "ES6 Basics",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "dev": "node 0-main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^27.0.0",
+    "babel-jest": "^27.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "eslint": "^7.0.0"
+  }
+}
