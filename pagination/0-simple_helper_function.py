@@ -5,6 +5,7 @@ Module simple_helper_function
 
 from typing import Tuple
 
+
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
     """
     Retourne un tuple contenant le début et la fin de la plage d'indices
