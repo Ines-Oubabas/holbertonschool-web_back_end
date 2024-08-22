@@ -42,14 +42,13 @@ class Server:
 
         # Return the slice of the dataset corresponding to the page
         return data[start_index:end_index] if start_index < len(data) else []
-    
+
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict[str, Any]:
-        """Returns a dictionary of the pagination information"""
+        """Returns a dictionary of the pagination information."""
         data = self.get_page(page, page_size)
         total_items = len(self.dataset())
         total_pages = math.ceil(total_items / page_size)
-        
-        # Correction: Adjust next_page condition
+
         return {
             'page_size': len(data),
             'page': page,
