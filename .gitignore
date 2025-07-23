@@ -1,2 +1,6 @@
-# Ignore node modules
-**/node_modules/
+# Caches, logs, OS files
+**/__pycache__/
+**/*.py[cod]
+*.log
+.DS_Store
+*.swp
