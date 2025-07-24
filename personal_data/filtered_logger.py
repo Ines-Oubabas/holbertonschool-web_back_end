@@ -7,7 +7,12 @@ import mysql.connector
 from mysql.connector.connection import MySQLConnection
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
+def filter_datum(
+    fields: List[str],
+    redaction: str,
+    message: str,
+    separator: str
+) -> str:
     """Obfuscate the values of specified fields."""
     return re.sub(
         rf"({'|'.join(fields)})=([^{separator}]+)",
@@ -31,7 +36,12 @@ class RedactingFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         original = super().format(record)
-        return filter_datum(self.fields, self.REDACTION, original, self.SEPARATOR)
+        return filter_datum(
+            self.fields,
+            self.REDACTION,
+            original,
+            self.SEPARATOR
+        )
 
 
 def get_logger() -> logging.Logger:
@@ -65,7 +75,8 @@ def main():
     logger = get_logger()
     for row in cursor:
         message = "; ".join(
-            f"{desc[0]}={str(val)}" for val, desc in zip(row, cursor.description)
+            f"{desc[0]}={str(val)}"
+            for val, desc in zip(row, cursor.description)
         )
         logger.info(message)
     cursor.close()
