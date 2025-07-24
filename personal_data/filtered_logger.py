@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""
+This module provides secure logging functionality for sensitive user data.
+It includes filtering of PII (Personally Identifiable Information), database
+connection using environment variables, and structured logging with redacted
+fields for confidentiality.
+"""
+
 import re
 import logging
 from typing import List
