@@ -11,7 +11,6 @@ import logging
 from typing import List
 import os
 import mysql.connector
-from mysql.connector.connection import MySQLConnection
 
 
 def filter_datum(
@@ -64,7 +63,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> MySQLConnection:
+def get_db():
     """Connect securely to a MySQL database using env variables."""
     return mysql.connector.connect(
         host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
