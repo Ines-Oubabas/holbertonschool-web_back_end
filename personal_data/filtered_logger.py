@@ -1,130 +1,83 @@
 #!/usr/bin/env python3
-"""
-This module implements a logging system with PII field redaction.
-It includes functions to filter sensitive data, configure logging,
-connect to a MySQL database, and log user information safely.
-"""
+"""Filtered logger"""
 
 import re
-import logging
 from typing import List
+from typing import Tuple
+import logging
 import os
 import mysql.connector
-from mysql.connector.connection import MySQLConnection
-
-
-def filter_datum(
-    fields: List[str],
-    redaction: str,
-    message: str,
-    separator: str
-) -> str:
-    """
-    Obfuscates specified fields in the given message string.
-
-    Args:
-        fields (List[str]): List of field names to obfuscate.
-        redaction (str): The redaction string to replace field values with.
-        message (str): The input log message.
-        separator (str): The field separator.
-
-    Returns:
-        str: The obfuscated log message.
-    """
-    return re.sub(
-        rf"({'|'.join(fields)})=([^{separator}]+)",
-        lambda m: f"{m.group(1)}={redaction}",
-        message
-    )
-
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
+def filter_datum(fields: List[str], redaction: str, message: str,
+                 separator: str) -> str:
+    """filter obfuscate data in a log message"""
+    for field in fields:
+        message = re.sub(field + r"=[^" + separator + r"]*",
+                         field + "=" + redaction, message)
+    return message
+
+
 class RedactingFormatter(logging.Formatter):
-    """
-    Formatter class that redacts sensitive information from log records.
-    """
+    """ Redacting Formatter class"""
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
     def __init__(self, fields: List[str]):
-        """
-        Initialize formatter.
-
-        Args:
-            fields (List[str]): List of fields to redact.
-        """
-        super().__init__(self.FORMAT)
+        """Initialize the formatter with fields to redact"""
+        super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        """
-        Format log record and redact sensitive fields.
-
-        Args:
-            record (logging.LogRecord): The log record to format.
-
-        Returns:
-            str: The formatted and redacted log string.
-        """
-        original = super().format(record)
-        return filter_datum(self.fields, self.REDACTION, original, self.SEPARATOR)
+        """Format log messages, redacting sensitive information"""
+        return filter_datum(self.fields, self.REDACTION,
+                            super(RedactingFormatter, self).format(record),
+                            self.SEPARATOR)
 
 
 def get_logger() -> logging.Logger:
-    """
-    Creates and configures a logger named 'user_data'.
-
-    Returns:
-        logging.Logger: Configured logger.
-    """
-    logger = logging.getLogger("user_data")
+    """return logging.Logger"""
+    logger = logging.getLogger('user_data')
     logger.setLevel(logging.INFO)
+
     logger.propagate = False
 
-    handler = logging.StreamHandler()
-    handler.setFormatter(RedactingFormatter(fields=PII_FIELDS))
-    logger.addHandler(handler)
+    stream_handler = logging.StreamHandler()
+    formatter = RedactingFormatter(PII_FIELDS)
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
 
     return logger
 
 
-def get_db() -> MySQLConnection:
-    """
-    Establishes a secure connection to the MySQL database using env variables.
-
-    Returns:
-        MySQLConnection: A MySQL database connection object.
-    """
-    return mysql.connector.connect(
-        host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """connect to the database using environnement variables"""
+    db_connection = mysql.connector.connect(
         user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
         password=os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+        host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
         database=os.getenv("PERSONAL_DATA_DB_NAME")
     )
+    return db_connection
 
 
 def main():
-    """
-    Main function that logs user data with sensitive fields redacted.
-    """
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM users;")
+    """Retrieve user data from the database and log it"""
     logger = get_logger()
+    db = get_db()
+
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM users;")
+    fields = [i[0] for i in cursor.description]
 
     for row in cursor:
-        message = "; ".join(
-            f"{desc[0]}={str(val)}" for val, desc in zip(row, cursor.description)
-        )
-        logger.info(message)
+        str_row = "; ".join(f"{f}={r}" for r, f in zip(row, fields))
+        log.info(str_row)
 
     cursor.close()
     db.close()
-
-
-if __name__ == "__main__":
-    main()
