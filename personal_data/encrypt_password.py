@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-This module provides functions to hash passwords and
-validate them using the bcrypt algorithm.
+This module provides utilities for password hashing and validation using bcrypt.
 """
 
 import bcrypt
@@ -22,7 +21,7 @@ def hash_password(password: str) -> bytes:
 
 def is_valid(hashed_password: bytes, password: str) -> bool:
     """
-    Validates a password against its hashed version.
+    Validates a password against a hashed version.
 
     Args:
         hashed_password (bytes): The hashed password.
