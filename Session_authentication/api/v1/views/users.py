@@ -16,6 +16,18 @@ def view_all_users() -> str:
     return jsonify(all_users)
 
 
+@app_views.route('/users/me', methods=['GET'], strict_slashes=False)
+def get_me_user() -> str:
+    """ GET /api/v1/users/me
+    Return:
+      - authenticated user as JSON
+      - 404 if no current user
+    """
+    if not request.current_user:
+        abort(404)
+    return jsonify(request.current_user.to_json())
+
+
 @app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
 def view_one_user(user_id: str = None) -> str:
     """ GET /api/v1/users/:id
@@ -27,17 +39,6 @@ def view_one_user(user_id: str = None) -> str:
     """
     if user_id is None:
         abort(404)
-
-    if user_id == "me":
-        if not hasattr(request, 'current_user'):
-            print("DEBUG: request.current_user attribute doesn't exist")
-            abort(404)
-        if request.current_user is None:
-            print("DEBUG: request.current_user is None")
-            abort(404)
-        print(f"DEBUG: request.current_user found: {request.current_user}")
-        return jsonify(request.current_user.to_json())
-
     user = User.get(user_id)
     if user is None:
         abort(404)
@@ -50,7 +51,7 @@ def delete_user(user_id: str = None) -> str:
     Path parameter:
       - User ID
     Return:
-      - empty JSON is the User has been correctly deleted
+      - empty JSON if the User has been correctly deleted
       - 404 if the User ID doesn't exist
     """
     if user_id is None:
@@ -78,7 +79,7 @@ def create_user() -> str:
     error_msg = None
     try:
         rj = request.get_json()
-    except Exception as e:
+    except Exception:
         rj = None
     if rj is None:
         error_msg = "Wrong format"
@@ -121,9 +122,7 @@ def update_user(user_id: str = None) -> str:
     rj = None
     try:
         rj = request.get_json()
-    except Exception as e:
-        rj = None
-    if rj is None:
+    except Exception:
         return jsonify({'error': "Wrong format"}), 400
     if rj.get('first_name') is not None:
         user.first_name = rj.get('first_name')
