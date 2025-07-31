@@ -42,4 +42,3 @@ def forbidden() -> str:
       - the status of the API
     """
     abort(403)
-  
