@@ -11,7 +11,7 @@ from db import DB
 from user import User
 
 
-def _hash_password(password) -> bytes:
+def _hash_password(password: str) -> bytes:
     """Return a salted bcrypt hash of the given password."""
     if not isinstance(password, str):
         password = str(password)
@@ -67,7 +67,7 @@ class Auth:
         except NoResultFound:
             return None
 
-    def destroy_session(self, user_id) -> None:
+    def destroy_session(self, user_id: int) -> None:
         """Invalidate a user's session."""
         self._db.update_user(user_id, session_id=None)
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """DB helper wrapping SQLAlchemy session operations on User."""
 
+from typing import Any
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -51,7 +52,7 @@ class DB:
         except Exception as exc:
             raise InvalidRequestError(str(exc))
 
-    def update_user(self, user_id, **kwargs) -> None:
+    def update_user(self, user_id: int, **kwargs: Any) -> None:
         """Update user attributes and commit.
 
         Raises:
