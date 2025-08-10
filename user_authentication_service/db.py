@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DB helper wrapping SQLAlchemy session operations on User."""
 
-from typing import Any, Dict
+from typing import Any
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -36,7 +36,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs: Any) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """Find first user matching provided fields or raise.
 
         Raises:
@@ -49,7 +49,7 @@ class DB:
             return self._session.query(User).filter_by(**kwargs).one()
         except NoResultFound:
             raise
-        except Exception as exc:  # wrong columns or bad query
+        except Exception as exc:
             raise InvalidRequestError(str(exc))
 
     def update_user(self, user_id: int, **kwargs: Any) -> None:
