@@ -52,7 +52,7 @@ class DB:
         except Exception as exc:
             raise InvalidRequestError(str(exc))
 
-    def update_user(self, user_id: int, **kwargs: Any) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """Update user attributes and commit.
 
         Raises:
