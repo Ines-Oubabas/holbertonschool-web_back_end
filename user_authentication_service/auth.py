@@ -30,7 +30,7 @@ class Auth:
         """Initialize Auth with a DB instance."""
         self._db = DB()
 
-    def register_user(self, email, password) -> User:
+    def register_user(self, email: str, password: str) -> User:
         """Register a new user or raise if email already exists."""
         try:
             self._db.find_user_by(email=email)
@@ -42,7 +42,7 @@ class Auth:
             )
         raise ValueError(f"User {email} already exists")
 
-    def valid_login(self, email, password) -> bool:
+    def valid_login(self, email: str, password: str) -> bool:
         """Validate credentials with bcrypt.checkpw."""
         try:
             user = self._db.find_user_by(email=email)
