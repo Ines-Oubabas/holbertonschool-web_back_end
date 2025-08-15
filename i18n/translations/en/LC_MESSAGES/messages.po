@@ -1,0 +1,20 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18n-project\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-15 00:00+0000\n"
+"PO-Revision-Date: 2025-08-15 00:00+0000\n"
+"Last-Translator: You <you@example.com>\n"
+"Language-Team: en <you@example.com>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/3-index.html:6
+msgid "home_title"
+msgstr "Welcome to Holberton"
+
+#: templates/3-index.html:10
+msgid "home_header"
+msgstr "Hello world!"
