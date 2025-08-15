@@ -1,0 +1,5 @@
+Flask==3.*
+Flask-Babel==3.*
+Babel
+pytz
+pycodestyle==2.5.*
