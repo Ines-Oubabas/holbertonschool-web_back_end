@@ -1,0 +1,3 @@
+redis
+pycodestyle==2.5.0
+mypy
