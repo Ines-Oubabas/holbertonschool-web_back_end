@@ -85,5 +85,4 @@ class Cache:
 
     def get_int(self, key: str) -> Optional[int]:
         """parametrize Cache.get with the integer conversion function."""
-
         return self.get(key, fn=int)
