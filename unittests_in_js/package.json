@@ -1,0 +1,14 @@
+{
+  "name": "unittests_in_js",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Holberton - Unit tests in JS (Mocha/Chai/Sinon)",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "devDependencies": {
+    "chai": "4.3.10",
+    "mocha": "6.2.2",
+    "sinon": "7.5.0"
+  }
+}
