@@ -1,64 +1,113 @@
-# Queuing system in JS
+# 📦 Queuing System in JS
 
-## Prérequis
-- Ubuntu 18.04
+Projet Holberton – **Node.js + Redis + Kue + Express**
+
+Ce projet met en place un système de **file d’attente (queue)** avec Redis et Kue, ainsi qu’une API REST simple utilisant Express et Redis pour gérer des stocks de produits.  
+Il couvre plusieurs notions : opérations Redis basiques, Pub/Sub, gestion de jobs avec Kue, suivi de progression/erreurs, tests unitaires et API REST.
+
+---
+
+## 🚀 Installation & Setup
+
+### Prérequis
+- Ubuntu 18.04+ (ou WSL2)
 - Node.js 12.x
-- Redis 5.0.7+ (testé avec 6.0.10)
-- `npm install` (utilise Babel + Mocha + ESLint + Kue)
+- Redis >= 5.0.7
 
-## Tâche 0 — Installer Redis
+### Cloner le repo
 ```bash
-wget http://download.redis.io/releases/redis-6.0.10.tar.gz
-tar xzf redis-6.0.10.tar.gz
-cd redis-6.0.10
-make -j$(nproc)
-src/redis-server &
-src/redis-cli ping    # PONG
-src/redis-cli set Holberton School
-src/redis-cli get Holberton  # "School"
-# Copier dump.rdb depuis redis-6.0.10 (ou 5.0.7) vers la racine du projet:
-cp dump.rdb /path/to/queuing_system_in_js/
+git clone https://github.com/<ton-github>/holbertonschool-web_back_end.git
+cd holbertonschool-web_back_end/queuing_system_in_js
+Installer les dépendances
+bash
+Copier le code
+npm install
+Vérifier Redis
+bash
+Copier le code
+redis-cli ping
+# → PONG
+📂 Structure du projet
+0-redis_client.js : connexion Redis basique
 
-Scripts utiles
+1-redis_op.js : opérations GET/SET avec callbacks
 
-npm run dev <file.js> : lance un fichier avec babel-node + nodemon
+2-redis_op_async.js : mêmes opérations en async/await
 
-npm test <pattern> : lance mocha avec Babel
+4-redis_advanced_op.js : stockage et lecture de hash Redis
 
-Exemples rapides
+5-subscriber.js / 5-publisher.js : Pub/Sub Redis
 
-Client Redis de base
-npm run dev 0-redis_client.js
+6-job_creator.js / 6-job_processor.js : création et traitement de jobs Kue
 
-Opérations simples
-npm run dev 1-redis_op.js
+7-job_creator.js / 7-job_processor.js : jobs avec progression et blacklist
 
-Opérations async/await
+8-job.js / 8-job-main.js : fonction générique de création de jobs + tests (8-job.test.js)
+
+9-stock.js : API REST Express pour gérer des stocks de produits avec Redis
+
+🧪 Utilisation & Démonstrations
+0–4. Redis basique
+bash
+Copier le code
 npm run dev 2-redis_op_async.js
+Affiche School, Reply: OK, 100.
 
-Hash avancé
-npm run dev 4-redis_advanced_op.js
+5. Pub/Sub
+Terminal A (subscriber)
 
-Pub/Sub (2 terminaux)
+bash
+Copier le code
 npm run dev 5-subscriber.js
+Terminal B (publisher)
+
+bash
+Copier le code
 npm run dev 5-publisher.js
+6–7. Queue avec Kue
+Processor
 
-Kue (2 terminaux)
-Créateur: npm run dev 6-job_creator.js
-Processeur: npm run dev 6-job_processor.js
+bash
+Copier le code
+npm run dev 6-job_processor.js
+Creator
 
-Kue avec progression/erreurs (2 terminaux)
-Créateur: npm run dev 7-job_creator.js
-Processeur: npm run dev 7-job_processor.js
+bash
+Copier le code
+npm run dev 6-job_creator.js
+Task 7 (progress & blacklist)
 
-Tests unitaires
+bash
+Copier le code
+npm run dev 7-job_processor.js
+npm run dev 7-job_creator.js
+8. Fonction générique & tests
+bash
+Copier le code
+npm run dev 8-job-main.js
 npm test 8-job.test.js
+# → 2 passing
+9. API Express + Redis
+Lancer le serveur :
 
-Stock + Redis + Express
+bash
+Copier le code
 npm run dev 9-stock.js
+Dans un autre terminal :
 
-GET /list_products
+bash
+Copier le code
+curl 127.0.0.1:1245/list_products
+curl 127.0.0.1:1245/list_products/1
+curl 127.0.0.1:1245/reserve_product/1
+✅ Résultats attendus
+Redis : connexion, GET/SET, hash → OK
 
-GET /list_products/:itemId
+Pub/Sub : messages publiés/reçus, arrêt avec KILL_SERVER → OK
 
-GET /reserve_product/:itemId
+Kue : jobs créés/traités, progression, blacklist → OK
+
+Tests : 8-job.test.js → OK (2 passing)
+
+API REST : JSON correct pour la liste, le détail, et la réservation de produits → OK
+
