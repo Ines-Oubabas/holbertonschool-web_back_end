@@ -19,12 +19,11 @@ Il couvre plusieurs notions : opérations Redis basiques, Pub/Sub, gestion de jo
 git clone https://github.com/<ton-github>/holbertonschool-web_back_end.git
 cd holbertonschool-web_back_end/queuing_system_in_js
 Installer les dépendances
-bash
-Copier le code
+
 npm install
 Vérifier Redis
 bash
-Copier le code
+
 redis-cli ping
 # → PONG
 📂 Structure du projet
@@ -49,7 +48,7 @@ redis-cli ping
 🧪 Utilisation & Démonstrations
 0–4. Redis basique
 bash
-Copier le code
+
 npm run dev 2-redis_op_async.js
 Affiche School, Reply: OK, 100.
 
@@ -57,46 +56,37 @@ Affiche School, Reply: OK, 100.
 Terminal A (subscriber)
 
 bash
-Copier le code
+
 npm run dev 5-subscriber.js
 Terminal B (publisher)
 
-bash
-Copier le code
+
 npm run dev 5-publisher.js
 6–7. Queue avec Kue
 Processor
 
-bash
-Copier le code
+
 npm run dev 6-job_processor.js
 Creator
 
-bash
-Copier le code
 npm run dev 6-job_creator.js
 Task 7 (progress & blacklist)
 
-bash
-Copier le code
 npm run dev 7-job_processor.js
 npm run dev 7-job_creator.js
 8. Fonction générique & tests
-bash
-Copier le code
+
 npm run dev 8-job-main.js
 npm test 8-job.test.js
 # → 2 passing
 9. API Express + Redis
 Lancer le serveur :
 
-bash
-Copier le code
+
 npm run dev 9-stock.js
 Dans un autre terminal :
 
-bash
-Copier le code
+
 curl 127.0.0.1:1245/list_products
 curl 127.0.0.1:1245/list_products/1
 curl 127.0.0.1:1245/reserve_product/1
@@ -110,4 +100,5 @@ Kue : jobs créés/traités, progression, blacklist → OK
 Tests : 8-job.test.js → OK (2 passing)
 
 API REST : JSON correct pour la liste, le détail, et la réservation de produits → OK
+
 
